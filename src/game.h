@@ -19,9 +19,9 @@ class Game {
   Snake snake;
   SDL_Point food;
 
-  std::random_device dev;
-  std::mt19937 engine;
-  std::uniform_int_distribution<int> random_w;
+  std::random_device dev;   // use random_device to seed PRNG like mt19937
+  std::mt19937 engine;      // Pseudo-random number generator 
+  std::uniform_int_distribution<int> random_w;  // define distribution type (uniform here) for random number generation
   std::uniform_int_distribution<int> random_h;
 
   int score{0};

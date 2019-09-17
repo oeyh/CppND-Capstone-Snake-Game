@@ -4,17 +4,21 @@
 #include "renderer.h"
 
 int main() {
-  constexpr std::size_t kFramesPerSecond{60};
-  constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
-  constexpr std::size_t kScreenWidth{640};
-  constexpr std::size_t kScreenHeight{640};
-  constexpr std::size_t kGridWidth{32};
-  constexpr std::size_t kGridHeight{32};
+  constexpr std::size_t kFramesPerSecond{60};   // constexpr makes sure it is a compile-time constant; frames per second
+  constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};   // ms per frame = 1000 / frame per second
+  constexpr std::size_t kScreenWidth{640};    // screen width
+  constexpr std::size_t kScreenHeight{640};   // screen height
+  constexpr std::size_t kGridWidth{32};       // number of grids in horizontal direction
+  constexpr std::size_t kGridHeight{32};      // number of grids in vertical direction
+  // constexpr std::size_t kScreenWidth{720};    // screen width
+  // constexpr std::size_t kScreenHeight{720};   // screen height
+  // constexpr std::size_t kGridWidth{8};       // number of grids in horizontal direction
+  // constexpr std::size_t kGridHeight{32};      // number of grids in vertical direction
 
-  Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-  Controller controller;
-  Game game(kGridWidth, kGridHeight);
-  game.Run(controller, renderer, kMsPerFrame);
+  Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);  // create Renderer object
+  Controller controller;    // create controller object, used to interface with game control input
+  Game game(kGridWidth, kGridHeight);   // create game object
+  game.Run(controller, renderer, kMsPerFrame);    // run game, start game loop
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";
   std::cout << "Size: " << game.GetSize() << "\n";

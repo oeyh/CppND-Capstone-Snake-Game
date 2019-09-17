@@ -6,35 +6,39 @@
 
 class Snake {
  public:
-  enum class Direction { kUp, kDown, kLeft, kRight };
+  enum class Direction { kUp, kDown, kLeft, kRight };   // scoped enumeration called Direction
 
-  Snake(int grid_width, int grid_height)
+  // constructor
+  // grid_width and grid_height are defined same as in main(), this is for snake to know when to wrap around when hitting boundaries
+  // head_x and head_y defines the coordinates (in unit of grids) of the head of the snake 
+  Snake(int grid_width, int grid_height)    
       : grid_width(grid_width),
         grid_height(grid_height),
         head_x(grid_width / 2),
         head_y(grid_height / 2) {}
 
-  void Update();
+  void Update();    // update head and body
 
-  void GrowBody();
-  bool SnakeCell(int x, int y);
+  void GrowBody();  // set growing flag to true
+  bool SnakeCell(int x, int y);   // check if a cell is part of the snake
 
-  Direction direction = Direction::kUp;
+  Direction direction = Direction::kUp;   // public direction attribute
 
-  float speed{0.1f};
-  int size{1};
-  bool alive{true};
-  float head_x;
-  float head_y;
-  std::vector<SDL_Point> body;
+  // float speed{0.1f};    // speed of the snake, starting at 0.1, what does 0.1 mean? 0.1 grid per loop? 
+  float speed{0.02f};
+  int size{1};          // size, starting at 1
+  bool alive{true};     // alive or not
+  float head_x;         // head x coordinate, float
+  float head_y;         // head y coordinate, float
+  std::vector<SDL_Point> body;    // a vector of all body points; the begin of the vector is tail, the end is head 
 
  private:
-  void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
+  void UpdateHead();    // update head
+  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);   // update body
 
-  bool growing{false};
-  int grid_width;
-  int grid_height;
+  bool growing{false};  // use growing as a flag to mark if the snake is touching the food
+  int grid_width;     // ???
+  int grid_height;    // ???
 };
 
 #endif

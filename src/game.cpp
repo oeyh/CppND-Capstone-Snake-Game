@@ -2,6 +2,8 @@
 #include <iostream>
 #include "SDL.h"
 
+
+// Contructor, init game
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
@@ -10,6 +12,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
   PlaceFood();
 }
 
+// Game loop
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
@@ -79,7 +82,8 @@ void Game::Update() {
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
-    snake.speed += 0.02;
+    // snake.speed += 0.02;
+    snake.speed += 0.004;
   }
 }
 

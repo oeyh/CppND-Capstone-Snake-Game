@@ -3,12 +3,15 @@
 #include "SDL.h"
 #include "snake.h"
 
+// change direction based on input direction
+// opposite direction is also fed manually (may be not the best way to do it)
 void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
                                  Snake::Direction opposite) const {
   if (snake.direction != opposite || snake.size == 1) snake.direction = input;
   return;
 }
 
+// handles quit event and key stroke of direction keys
 void Controller::HandleInput(bool &running, Snake &snake) const {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
