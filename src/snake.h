@@ -6,7 +6,7 @@
 
 class Snake {
  public:
-  enum class Direction { kUp, kDown, kLeft, kRight };   // scoped enumeration called Direction
+  enum class Direction { kUp, kLeft, kRight, kDown };   // scoped enumeration called Direction
 
   // constructor
   // grid_width and grid_height are defined same as in main(), this is for snake to know when to wrap around when hitting boundaries

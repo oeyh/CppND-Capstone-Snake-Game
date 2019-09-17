@@ -5,9 +5,8 @@
 
 // change direction based on input direction
 // opposite direction is also fed manually (may be not the best way to do it)
-void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
-                                 Snake::Direction opposite) const {
-  if (snake.direction != opposite || snake.size == 1) snake.direction = input;
+void Controller::ChangeDirection(Snake &snake, Snake::Direction input) const {
+  if (static_cast<int>(snake.direction) + static_cast<int>(input) != 3 || snake.size == 1) snake.direction = input;
   return;
 }
 
@@ -20,23 +19,19 @@ void Controller::HandleInput(bool &running, Snake &snake) const {
     } else if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
         case SDLK_UP:
-          ChangeDirection(snake, Snake::Direction::kUp,
-                          Snake::Direction::kDown);
+          ChangeDirection(snake, Snake::Direction::kUp);
           break;
 
         case SDLK_DOWN:
-          ChangeDirection(snake, Snake::Direction::kDown,
-                          Snake::Direction::kUp);
+          ChangeDirection(snake, Snake::Direction::kDown);
           break;
 
         case SDLK_LEFT:
-          ChangeDirection(snake, Snake::Direction::kLeft,
-                          Snake::Direction::kRight);
+          ChangeDirection(snake, Snake::Direction::kLeft);
           break;
 
         case SDLK_RIGHT:
-          ChangeDirection(snake, Snake::Direction::kRight,
-                          Snake::Direction::kLeft);
+          ChangeDirection(snake, Snake::Direction::kRight);
           break;
       }
     }
