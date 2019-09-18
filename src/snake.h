@@ -25,7 +25,7 @@ class Snake {
   Direction direction = Direction::kUp;   // public direction attribute
 
   // float speed{0.1f};    // speed of the snake, starting at 0.1, what does 0.1 mean? 0.1 grid per loop? 
-  float speed{0.02f};
+  float speed{0.05f};     // my slow mode
   int size{1};          // size, starting at 1
   bool alive{true};     // alive or not
   float head_x;         // head x coordinate, float

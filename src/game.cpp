@@ -7,8 +7,8 @@
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
-      random_w(0, static_cast<int>(grid_width)),  // inclusive on both sides
-      random_h(0, static_cast<int>(grid_height)) {
+      random_w(0, static_cast<int>(grid_width) - 1),  // inclusive on both sides, add -1 to avoid placing food just outside screen
+      random_h(0, static_cast<int>(grid_height) - 1) {
   PlaceFood();
 }
 
@@ -63,6 +63,9 @@ void Game::PlaceFood() {
     if (!snake.SnakeCell(x, y)) {
       food.x = x;
       food.y = y;
+      
+      // debug codes, print food coordinates
+      // std::cout << "Food placed at (" << food.x << ", " << food.y <<")\n";
       return;
     }
   }
@@ -83,7 +86,7 @@ void Game::Update() {
     // Grow snake and increase speed.
     snake.GrowBody();
     // snake.speed += 0.02;
-    snake.speed += 0.004;
+    snake.speed += 0.01;  // my slower mode
   }
 }
 
