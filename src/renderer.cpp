@@ -11,7 +11,7 @@ Renderer::Renderer(const std::size_t screen_width,
       grid_width(grid_width),
       grid_height(grid_height) {
   // Initialize SDL
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     std::cerr << "SDL could not initialize.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
@@ -32,6 +32,26 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Renderer could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+
+  // initialize SDL_mixer
+  if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
+    printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+  }
+
+  //Load music
+  bgMusic = Mix_LoadMUS( "audio/Super Mario Bros.mp3" );
+  if( bgMusic == nullptr )
+  {
+    printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+  }
+  
+  // //Load sound effects
+  // gScratch = Mix_LoadWAV( "21_sound_effects_and_music/scratch.wav" );
+  // if( gScratch == NULL )
+  // {
+  //   printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+  //   success = false;
+  // }
 }
 
 Renderer::~Renderer() {

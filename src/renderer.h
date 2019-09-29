@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include "snake.h"
 
 class Renderer {
@@ -17,6 +18,9 @@ class Renderer {
  private:
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
+  
+  Mix_Music *bgMusic;
+  Mix_Chunk *eatSound;
 
   const std::size_t screen_width;
   const std::size_t screen_height;
