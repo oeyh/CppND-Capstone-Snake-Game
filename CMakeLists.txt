@@ -15,11 +15,14 @@ project(SDL2Test)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS} src)
+find_package(SDL_mixer REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL_MIXER_INCLUDE_DIR} src)
 
 add_executable(SnakeGame src/main.cpp src/game.cpp src/controller.cpp src/renderer.cpp src/snake.cpp)
 
 # Store in an output variable (last argument) a substring of a given string (2nd argument) with leading and trailing spaces removed. 
 # not used at all ???
 string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
-target_link_libraries(SnakeGame ${SDL2_LIBRARIES})
+# string(STRIP ${SDL_MIXER_LIBRARIES} SDL_MIXER_LIBRARIES)
+
+target_link_libraries(SnakeGame ${SDL2_LIBRARIES} ${SDL_MIXER_LIBRARIES})
