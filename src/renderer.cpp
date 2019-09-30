@@ -39,7 +39,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
+void Renderer::Render(Snake const snake, SDL_Point const &food, SDL_Point const &stone) {
   SDL_Rect block;
   block.w = screen_width / grid_width;      // This is how a grid's width and height are defined
   block.h = screen_height / grid_height;
@@ -52,6 +52,12 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);   // Yellow
   block.x = food.x * block.w;
   block.y = food.y * block.h;
+  SDL_RenderFillRect(sdl_renderer, &block);
+
+  // Render stone
+  SDL_SetRenderDrawColor(sdl_renderer, 0x80, 0xFF, 0x00, 0xFF);   // Green
+  block.x = stone.x * block.w;
+  block.y = stone.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render snake's body

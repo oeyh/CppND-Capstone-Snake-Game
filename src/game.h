@@ -18,6 +18,7 @@ class Game {
  private:
   Snake snake;
   SDL_Point food;
+  SDL_Point stone;
 
   std::random_device dev;   // use random_device to seed PRNG like mt19937
   std::mt19937 engine;      // Pseudo-random number generator 
@@ -27,6 +28,7 @@ class Game {
   int score{0};
 
   void PlaceFood();
+  void PlaceStone();
   void Update();
 };
 

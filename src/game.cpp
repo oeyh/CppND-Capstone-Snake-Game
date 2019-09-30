@@ -10,6 +10,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       random_w(0, static_cast<int>(grid_width) - 1),  // inclusive on both sides, add -1 to avoid placing food just outside screen
       random_h(0, static_cast<int>(grid_height) - 1) {
   PlaceFood();
+  PlaceStone();
 }
 
 // Game loop
@@ -28,7 +29,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, food, stone);
 
     frame_end = SDL_GetTicks();
 
@@ -70,6 +71,16 @@ void Game::PlaceFood() {
     }
   }
 }
+
+void Game::PlaceStone() {
+  int x, y;
+  x = 10;
+  y = 10;
+  stone.x = x;
+  stone.y = y;
+  return;
+}
+
 
 void Game::Update() {
   if (!snake.alive) return;
