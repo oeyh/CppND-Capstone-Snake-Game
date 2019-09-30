@@ -17,8 +17,9 @@ class Game {
 
  private:
   Snake snake;
-  SDL_Point food;
-  SDL_Point stone;
+  std::vector<SDL_Point> food;
+  std::vector<SDL_Point> stone;
+  int food_cnt = 3; // TODO: will get this number from config file
 
   std::random_device dev;   // use random_device to seed PRNG like mt19937
   std::mt19937 engine;      // Pseudo-random number generator 

@@ -54,30 +54,25 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
+// init food location
 void Game::PlaceFood() {
-  int x, y;
-  while (true) {
-    x = random_w(engine);
-    y = random_h(engine);
-    // Check that the location is not occupied by a snake item before placing
-    // food.
-    if (!snake.SnakeCell(x, y)) {
-      food.x = x;
-      food.y = y;
-      
-      // debug codes, print food coordinates
-      // std::cout << "Food placed at (" << food.x << ", " << food.y <<")\n";
-      return;
-    }
+  for (int i = 0; i < food_cnt; ++i) {
+    SDL_Point point;
+    point.x = (i + 3) * 2;
+    point.y = i + 5;
+    food.push_back(point);
   }
+  return;
 }
 
+// init stone location
 void Game::PlaceStone() {
-  int x, y;
-  x = 10;
-  y = 10;
-  stone.x = x;
-  stone.y = y;
+  for (int i = 0; i < 3; ++i) {
+    SDL_Point point;
+    point.x = 5 + i * 10;
+    point.y = 5 + i * 10;
+    stone.push_back(point);
+  }
   return;
 }
 
@@ -91,14 +86,27 @@ void Game::Update() {
   int new_y = static_cast<int>(snake.head_y);
 
   // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
-    score++;
-    PlaceFood();
-    // Grow snake and increase speed.
-    snake.GrowBody();
-    // snake.speed += 0.02;
-    snake.speed += 0.01;  // my slower mode
+  bool hit_food = false;
+  int food_num = 0;
+  for (SDL_Point food_point : food) {
+    if (food_point.x == new_x && food_point.y == new_y) {
+      score++;
+      // PlaceFood();
+      hit_food = true;
+      // Grow snake and increase speed.
+      snake.GrowBody();
+      // snake.speed += 0.02;
+      // snake.speed += 0.01;  // my slower mode
+      break;
+    }
+    ++food_num;
   }
+
+  // remove the food point that has been consumed
+  if (hit_food) {
+    food.erase(food.begin() + food_num);
+  }
+
 }
 
 int Game::GetScore() const { return score; }
