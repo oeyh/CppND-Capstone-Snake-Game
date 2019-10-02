@@ -9,8 +9,12 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       engine(dev()),
       random_w(0, static_cast<int>(grid_width) - 1),  // inclusive on both sides, add -1 to avoid placing food just outside screen
       random_h(0, static_cast<int>(grid_height) - 1) {
-  PlaceFood();
-  PlaceStone();
+  // PlaceFood();
+  // PlaceStone();
+  m_level = 0;
+  level_finish = true;
+  // level_running = false;
+
 }
 
 // Game loop
@@ -24,6 +28,11 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   bool running = true;
 
   while (running) {
+    // pause game when needed
+    if (level_finish) {
+      LevelInit(controller, running, renderer, ++m_level);
+    }
+
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
@@ -54,8 +63,23 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
+// init next level
+void Game::LevelInit(Controller const &controller, bool &running, Renderer &renderer, int level) {
+  // level_finish = false;
+  PlaceFood(level);
+  PlaceStone(level);
+  LevelWelcomeScreen(renderer, level);
+
+  while (level_finish) {
+    controller.HandlePause(running, level_finish);
+  }
+}
+void Game::SetLevelRunning(bool run_flag) {
+  level_finish = !run_flag;
+}
+
 // init food location
-void Game::PlaceFood() {
+void Game::PlaceFood(int level) {
   for (int i = 0; i < food_cnt; ++i) {
     SDL_Point point;
     point.x = (i + 3) * 2;
@@ -66,13 +90,19 @@ void Game::PlaceFood() {
 }
 
 // init stone location
-void Game::PlaceStone() {
+void Game::PlaceStone(int level) {
   for (int i = 0; i < 3; ++i) {
     SDL_Point point;
     point.x = 5 + i * 10;
     point.y = 5 + i * 10;
     stone.push_back(point);
   }
+  return;
+}
+
+// init level screen
+void Game::LevelWelcomeScreen(Renderer &renderer, int level) {
+  renderer.Render(snake, food, stone);
   return;
 }
 

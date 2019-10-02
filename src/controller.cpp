@@ -42,3 +42,15 @@ void Controller::HandleInput(bool &running, Snake &snake) const {
     }
   }
 }
+
+// handles quit event and key stroke of start keys
+void Controller::HandlePause(bool &running, bool &level_finish) const {
+  SDL_Event e;
+  while (SDL_PollEvent(&e)) {
+    if (e.type == SDL_QUIT) {
+      running = false;
+    } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) {
+      level_finish = false;
+    }
+  }
+}
