@@ -13,16 +13,20 @@ class Game {
   void Run(Controller const &controller, Renderer &renderer, std::size_t target_frame_duration);
   int GetScore() const;
   int GetSize() const;
-  void SetLevelRunning(bool);
+  // void SetLevelRunning(bool);
   
 
  private:
+  
+
   Snake snake;
   std::vector<SDL_Point> food;
   std::vector<SDL_Point> stone;
   int food_cnt = 3; // TODO: will get this number from config file
   bool level_finish;  // flag that indicates a pause is needed
   int m_level;  // game level
+  std::size_t m_grid_width;
+  std::size_t m_grid_height;
 
   std::random_device dev;   // use random_device to seed PRNG like mt19937
   std::mt19937 engine;      // Pseudo-random number generator 

@@ -13,6 +13,8 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
   // PlaceStone();
   m_level = 0;
   level_finish = true;
+  m_grid_width = grid_width;
+  m_grid_height = grid_height;
   // level_running = false;
 
 }
@@ -30,7 +32,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   while (running) {
     // pause game when needed
     if (level_finish) {
+      std::cout << "Before Level Init\n";
       LevelInit(controller, running, renderer, ++m_level);
+      std::cout << "After Level Init\n";
     }
 
     frame_start = SDL_GetTicks();
@@ -39,6 +43,11 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     controller.HandleInput(running, snake);
     Update();
     renderer.Render(snake, food, stone);
+
+    // level completes when food_cnt becomes 0; food_cnt is updated in Game::Update()
+    if (food_cnt == 0) {
+      level_finish = true;
+    }
 
     frame_end = SDL_GetTicks();
 
@@ -60,26 +69,40 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     if (frame_duration < target_frame_duration) {
       SDL_Delay(target_frame_duration - frame_duration);
     }
+
+
   }
 }
 
 // init next level
 void Game::LevelInit(Controller const &controller, bool &running, Renderer &renderer, int level) {
   // level_finish = false;
+  std::cout << "Before Place Food\n";
   PlaceFood(level);
+  std::cout << "Before Place Stone\n";
   PlaceStone(level);
+  std::cout << "Before LevelWelcome screen\n";
   LevelWelcomeScreen(renderer, level);
 
+  // Also init snake
+  snake = Snake(m_grid_width, m_grid_height);
+
   while (level_finish) {
+    std::cout << "Before HandlePause\n";
     controller.HandlePause(running, level_finish);
+    SDL_Delay(100);
+    std::cout << "After HandlePause\n";
   }
+  std::cout << "After HandlePause while loop\n";
 }
-void Game::SetLevelRunning(bool run_flag) {
-  level_finish = !run_flag;
-}
+
+// void Game::SetLevelRunning(bool run_flag) {
+//   level_finish = !run_flag;
+// }
 
 // init food location
 void Game::PlaceFood(int level) {
+  food_cnt = 3;
   for (int i = 0; i < food_cnt; ++i) {
     SDL_Point point;
     point.x = (i + 3) * 2;
@@ -121,6 +144,7 @@ void Game::Update() {
   for (SDL_Point food_point : food) {
     if (food_point.x == new_x && food_point.y == new_y) {
       score++;
+      food_cnt--;   // update food count, level completes when food count = 0
       // PlaceFood();
       hit_food = true;
       // Grow snake and increase speed.

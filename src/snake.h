@@ -17,8 +17,10 @@ class Snake {
         head_x(grid_width / 2),
         head_y(grid_height / 2) {}
 
-  void Update();    // update head and body
+  
 
+  void Update();    // update head and body
+  
   void GrowBody();  // set growing flag to true
   bool SnakeCell(int x, int y);   // check if a cell is part of the snake
 
