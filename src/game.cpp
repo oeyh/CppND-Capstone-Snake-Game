@@ -164,6 +164,14 @@ void Game::Update() {
     food_cnt = std::count(food_status.begin(), food_status.end(), true);   // update food count, level completes when food count = 0
   }
 
+  // Check if snake hit stone; if so, the snake dies
+  for (SDL_Point stone_point : stone) {
+    if (stone_point.x == new_x && stone_point.y == new_y) {
+      snake.alive = false;
+      break;
+    }
+  }
+
 }
 
 int Game::GetScore() const { return score; }
