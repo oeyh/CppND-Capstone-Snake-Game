@@ -34,11 +34,16 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // pause game when needed
     if (level_finish) {
 
-      std::cout << "Before Level Init\n";
+      // std::cout << "Before Level Init\n";
       LevelInit(controller, running, renderer, m_level);
       m_level++;
       // LevelInit(controller, running, renderer, m_level);  // for testing, level does not increment
-      std::cout << "After Level Init\n";
+      // std::cout << "After Level Init\n";
+    }
+
+    // if running flag becomes false, quit game loop
+    if (!running) {
+      break;
     }
 
     frame_start = SDL_GetTicks();
@@ -49,8 +54,8 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     renderer.Render(snake, food, food_status, stone);
 
     // for debug
-    std::cout << "After Update and Render\n";
-    std::cout << "Food Count: " << food_cnt << "\n";
+    // std::cout << "After Update and Render\n";
+    // std::cout << "Food Count: " << food_cnt << "\n";
 
     // level completes when food_cnt becomes 0; food_cnt is updated in Game::Update()
     if (food_cnt == 0) {
@@ -84,26 +89,33 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
 // init next level
 void Game::LevelInit(Controller const &controller, bool &running, Renderer &renderer, int level) {
-  // read level config file and init level
-  std::string level_file {"level_" + std::to_string(level) + ".dat"};
-  std::cout << level_file << "\n";
-  Level levelconfig(level_file);
+  if (level <= total_levels) {
+    // read level config file and init level
+    std::string level_file {"level_" + std::to_string(level) + ".dat"};
+    std::cout << level_file << "\n";
+    Level levelconfig(level_file);
 
-  // level_finish = false;
-  // std::cout << "Before Place Food\n";
-  PlaceFood(levelconfig);
-  // std::cout << "Before Place Stone\n";
-  PlaceStone(levelconfig);
-  // std::cout << "Before LevelWelcome screen\n";
-  LevelWelcomeScreen(renderer, levelconfig.level_id);
+    // level_finish = false;
+    // std::cout << "Before Place Food\n";
+    PlaceFood(levelconfig);
+    // std::cout << "Before Place Stone\n";
+    PlaceStone(levelconfig);
+    // std::cout << "Before LevelWelcome screen\n";
+    LevelWelcomeScreen(renderer, levelconfig.level_id);
 
-  // Also init snake
-  snake = Snake(m_grid_width, m_grid_height);
+    // Also init snake
+    snake = Snake(m_grid_width, m_grid_height);
+  }
 
   while (level_finish) {
     // std::cout << "Before HandlePause\n";
-    controller.HandlePause(running, level_finish);
-    SDL_Delay(100);
+    // if running flag becomes false, quit loop
+    if (!running) {  
+      break;
+    }
+    controller.HandlePause(running, level_finish); // click cross on window would set running to false and quit the game loop
+    // SDL_Delay(100);
+  
     // std::cout << "After HandlePause\n";
   }
   // std::cout << "After HandlePause while loop\n";

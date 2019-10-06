@@ -42,6 +42,7 @@ class Game {
   int food_cnt; // TODO: will get this number from config file
   std::vector<bool> food_status;  // whether the food is eaten or not
   bool level_finish;  // flag that indicates a pause is needed
+  int total_levels = 3; // total number of levels; when reaches total_levels + 1, game ends
   int m_level;  // game level
   std::size_t m_grid_width;
   std::size_t m_grid_height;
@@ -52,6 +53,7 @@ class Game {
   std::uniform_int_distribution<int> random_h;
 
   int score{0};
+  
 
   void PlaceFood(Level &lc);
   void PlaceStone(Level &lc);
@@ -59,6 +61,7 @@ class Game {
   void LevelInit(Controller const &controller, bool &running, Renderer &renderer, int level);
   void LevelWelcomeScreen(Renderer &renderer, int level);
   bool level_running; // 
+  
 };
 
 #endif
