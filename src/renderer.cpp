@@ -39,7 +39,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std::vector<SDL_Point> const &stone) {
+void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std::vector<bool> const &food_status, std::vector<SDL_Point> const &stone) {
   SDL_Rect block;
   block.w = screen_width / grid_width;      // This is how a grid's width and height are defined
   block.h = screen_height / grid_height;
@@ -50,10 +50,12 @@ void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std
 
   // Render food
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);   // Yellow
-  for (SDL_Point const &point : food) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
+  for (int i = 0; i < food.size(); ++i) {
+    if (food_status[i]) {   // only render food that's still there
+      block.x = food[i].x * block.w;
+      block.y = food[i].y * block.h;
+      SDL_RenderFillRect(sdl_renderer, &block);
+    }
   }
 
   // Render stone

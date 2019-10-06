@@ -1,6 +1,7 @@
 #include "game.h"
 #include <iostream>
 #include "SDL.h"
+#include <algorithm> // for std::count
 
 
 // Contructor, init game
@@ -11,7 +12,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       random_h(0, static_cast<int>(grid_height) - 1) {
   // PlaceFood();
   // PlaceStone();
-  m_level = 0;
+  m_level = 1;
   level_finish = true;
   m_grid_width = grid_width;
   m_grid_height = grid_height;
@@ -32,8 +33,11 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   while (running) {
     // pause game when needed
     if (level_finish) {
+
       std::cout << "Before Level Init\n";
-      LevelInit(controller, running, renderer, ++m_level);
+      LevelInit(controller, running, renderer, m_level);
+      m_level++;
+      // LevelInit(controller, running, renderer, m_level);  // for testing, level does not increment
       std::cout << "After Level Init\n";
     }
 
@@ -42,7 +46,11 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food, stone);
+    renderer.Render(snake, food, food_status, stone);
+
+    // for debug
+    std::cout << "After Update and Render\n";
+    std::cout << "Food Count: " << food_cnt << "\n";
 
     // level completes when food_cnt becomes 0; food_cnt is updated in Game::Update()
     if (food_cnt == 0) {
@@ -76,24 +84,29 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
 // init next level
 void Game::LevelInit(Controller const &controller, bool &running, Renderer &renderer, int level) {
+  // read level config file and init level
+  std::string level_file {"level_" + std::to_string(level) + ".dat"};
+  std::cout << level_file << "\n";
+  Level levelconfig(level_file);
+
   // level_finish = false;
-  std::cout << "Before Place Food\n";
-  PlaceFood(level);
-  std::cout << "Before Place Stone\n";
-  PlaceStone(level);
-  std::cout << "Before LevelWelcome screen\n";
-  LevelWelcomeScreen(renderer, level);
+  // std::cout << "Before Place Food\n";
+  PlaceFood(levelconfig);
+  // std::cout << "Before Place Stone\n";
+  PlaceStone(levelconfig);
+  // std::cout << "Before LevelWelcome screen\n";
+  LevelWelcomeScreen(renderer, levelconfig.level_id);
 
   // Also init snake
   snake = Snake(m_grid_width, m_grid_height);
 
   while (level_finish) {
-    std::cout << "Before HandlePause\n";
+    // std::cout << "Before HandlePause\n";
     controller.HandlePause(running, level_finish);
     SDL_Delay(100);
-    std::cout << "After HandlePause\n";
+    // std::cout << "After HandlePause\n";
   }
-  std::cout << "After HandlePause while loop\n";
+  // std::cout << "After HandlePause while loop\n";
 }
 
 // void Game::SetLevelRunning(bool run_flag) {
@@ -101,31 +114,20 @@ void Game::LevelInit(Controller const &controller, bool &running, Renderer &rend
 // }
 
 // init food location
-void Game::PlaceFood(int level) {
-  food_cnt = 3;
-  for (int i = 0; i < food_cnt; ++i) {
-    SDL_Point point;
-    point.x = (i + 3) * 2;
-    point.y = i + 5;
-    food.push_back(point);
-  }
-  return;
+void Game::PlaceFood(Level &lc) {
+  food = lc.food;
+  food_cnt = lc.food_cnt;
+  food_status = std::vector<bool>(food_cnt, true);  // init to all true
 }
 
 // init stone location
-void Game::PlaceStone(int level) {
-  for (int i = 0; i < 3; ++i) {
-    SDL_Point point;
-    point.x = 5 + i * 10;
-    point.y = 5 + i * 10;
-    stone.push_back(point);
-  }
-  return;
+void Game::PlaceStone(Level &lc) {
+  stone = lc.stone;
 }
 
 // init level screen
 void Game::LevelWelcomeScreen(Renderer &renderer, int level) {
-  renderer.Render(snake, food, stone);
+  renderer.Render(snake, food, food_status, stone);
   return;
 }
 
@@ -144,7 +146,7 @@ void Game::Update() {
   for (SDL_Point food_point : food) {
     if (food_point.x == new_x && food_point.y == new_y) {
       score++;
-      food_cnt--;   // update food count, level completes when food count = 0
+      
       // PlaceFood();
       hit_food = true;
       // Grow snake and increase speed.
@@ -156,12 +158,76 @@ void Game::Update() {
     ++food_num;
   }
 
-  // remove the food point that has been consumed
+  // // record the food point that has been consumed
   if (hit_food) {
-    food.erase(food.begin() + food_num);
+    food_status[food_num] = false;
+    food_cnt = std::count(food_status.begin(), food_status.end(), true);   // update food count, level completes when food count = 0
   }
 
 }
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+
+// Nested class constructor
+Game::Level::Level(std::string levelfile) {
+  std::ifstream infile("../levels/" + levelfile);
+  // check if open is success
+  if (!infile) {
+    std::cout << "Cannot open file.\n";
+    exit(1);
+  }
+
+  // parse level file
+  std::string line;
+  // first line - level id
+  std::getline(infile, line);
+  level_id = std::stoi(line);
+
+  // food count
+  std::getline(infile, line);
+  food_cnt = std::stoi(line);
+
+  // food points
+  std::getline(infile, line);
+  // split line at whitespaces
+  std::istringstream iss(line);
+  std::istream_iterator<std::string> start(iss), end;
+  std::vector<std::string> results(start, end);
+  for (std::string result : results) {
+    std::string temp = result.substr(1, result.length() - 2); // example: "7,23"
+    std::istringstream ss(temp);
+    std::string num_str;
+    std::getline(ss, num_str, ','); // get first number
+    SDL_Point point;
+    point.x = stoi(num_str);
+    std::getline(ss, num_str);    // get second number
+    point.y = stoi(num_str);
+
+    food.push_back(point);
+  }
+
+  // stone count
+  std::getline(infile, line);
+  stone_cnt = std::stoi(line);
+
+  // stone points
+  std::getline(infile, line);
+  std::istringstream iss2(line);
+  std::istream_iterator<std::string> start2(iss2), end2;
+  std::vector<std::string> results2(start2, end2);
+  for (std::string result : results2) {
+    std::string temp = result.substr(1, result.length() - 2); // example: "7,23"
+    std::istringstream ss(temp);
+    std::string num_str;
+    std::getline(ss, num_str, ','); // get first number
+    SDL_Point point;
+    point.x = stoi(num_str);
+    std::getline(ss, num_str);    // get second number
+    point.y = stoi(num_str);
+
+    stone.push_back(point);
+  }
+
+  infile.close();
+}

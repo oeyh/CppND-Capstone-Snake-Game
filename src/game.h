@@ -8,6 +8,7 @@
 #include "snake.h"
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 class Game {
  public:
@@ -32,73 +33,14 @@ class Game {
     // level id
     // food count, then food coordinates
     // stone count, then stone coordinates
-    Level(std::string levelfile) {
-      std::ifstream infile("levels/" + levelfile);
-      // check if open is success
-      if (!infile) {
-        std::cout << "Cannot open file.\n";
-        exit(1);
-      }
-
-      // parse level file
-      std::string line;
-      // first line - level id
-      std::getline(infile, line);
-      level_id = std::stoi(line);
-
-      // food count
-      std::getline(infile, line);
-      food_cnt = std::stoi(line);
-
-      // food points
-      std::getline(infile, line);
-      // split line at whitespaces
-      std::istringstream iss(line);
-      std::istream_iterator<std::string> start(iss), end;
-      std::vector<std::string> results(start, end);
-      for (std::string result : results) {
-        std::string temp = result.substr(1, result.length() - 2); // example: "7,23"
-        std::istringstream ss(temp);
-        std::string num_str;
-        std::getline(ss, num_str, ','); // get first number
-        SDL_Point point;
-        point.x = stoi(num_str);
-        std::getline(ss, num_str);    // get second number
-        point.y = stoi(num_str);
-
-        food.push_back(point);
-      }
-
-      // stone count
-      std::getline(infile, line);
-      stone_cnt = std::stoi(line);
-
-      // stone points
-      std::getline(infile, line);
-      std::istringstream iss2(line);
-      std::istream_iterator<std::string> start2(iss2), end2;
-      std::vector<std::string> results2(start2, end2);
-      for (std::string result : results2) {
-        std::string temp = result.substr(1, result.length() - 2); // example: "7,23"
-        std::istringstream ss(temp);
-        std::string num_str;
-        std::getline(ss, num_str, ','); // get first number
-        SDL_Point point;
-        point.x = stoi(num_str);
-        std::getline(ss, num_str);    // get second number
-        point.y = stoi(num_str);
-
-        stone.push_back(point);
-      }
-
-      infile.close();
-    }
+    Level(std::string levelfile);
   };
 
   Snake snake;
   std::vector<SDL_Point> food;
   std::vector<SDL_Point> stone;
-  int food_cnt = 3; // TODO: will get this number from config file
+  int food_cnt; // TODO: will get this number from config file
+  std::vector<bool> food_status;  // whether the food is eaten or not
   bool level_finish;  // flag that indicates a pause is needed
   int m_level;  // game level
   std::size_t m_grid_width;
@@ -111,8 +53,8 @@ class Game {
 
   int score{0};
 
-  void PlaceFood(int level);
-  void PlaceStone(int level);
+  void PlaceFood(Level &lc);
+  void PlaceStone(Level &lc);
   void Update();
   void LevelInit(Controller const &controller, bool &running, Renderer &renderer, int level);
   void LevelWelcomeScreen(Renderer &renderer, int level);
