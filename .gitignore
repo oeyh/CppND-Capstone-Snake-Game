@@ -2,3 +2,5 @@ build/
 .vscode/
 audio/
 .DS_Store
+*.pptx
+images/archive

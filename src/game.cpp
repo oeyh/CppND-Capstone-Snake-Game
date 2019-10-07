@@ -51,7 +51,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food, food_status, stone);
+    renderer.Render(snake, food, food_status, stone, level_finish, m_level);
 
     // for debug
     // std::cout << "After Update and Render\n";
@@ -105,9 +105,13 @@ void Game::LevelInit(Controller const &controller, bool &running, Renderer &rend
 
     // Also init snake
     snake = Snake(m_grid_width, m_grid_height);
+
+    // // Render level welcome screen
+    // renderer.Render(snake, food, food_status, stone, level_finish, m_level);
   }
 
   while (level_finish) {
+
     // std::cout << "Before HandlePause\n";
     // if running flag becomes false, quit loop
     if (!running) {  
@@ -139,7 +143,7 @@ void Game::PlaceStone(Level &lc) {
 
 // init level screen
 void Game::LevelWelcomeScreen(Renderer &renderer, int level) {
-  renderer.Render(snake, food, food_status, stone);
+  renderer.Render(snake, food, food_status, stone, level_finish, m_level);
   return;
 }
 

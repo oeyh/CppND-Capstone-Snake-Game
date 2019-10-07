@@ -39,7 +39,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std::vector<bool> const &food_status, std::vector<SDL_Point> const &stone) {
+void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std::vector<bool> const &food_status, std::vector<SDL_Point> const &stone, bool &level_finish, int level) {
   SDL_Rect block;
   block.w = screen_width / grid_width;      // This is how a grid's width and height are defined
   block.h = screen_height / grid_height;
@@ -71,22 +71,43 @@ void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std
   }
 
   // Render snake's body
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);   // White
+  // SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);   // White
+  SDL_Texture* body_image = IMG_LoadTexture(sdl_renderer, "../images/greytinytank.png");
   for (SDL_Point const &point : snake.body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
+    // SDL_RenderFillRect(sdl_renderer, &block);
+    SDL_RenderCopy(sdl_renderer, body_image, nullptr, &block);
   }
 
   // Render snake's head
   block.x = static_cast<int>(snake.head_x) * block.w;
   block.y = static_cast<int>(snake.head_y) * block.h;
+
+  SDL_Texture* head_image;
   if (snake.alive) {
-    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);   // Blue
+    // SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);   // Blue
+    head_image = IMG_LoadTexture(sdl_renderer, "../images/greentank.png");
   } else {
-    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);   // Red
+    head_image = IMG_LoadTexture(sdl_renderer, "../images/blast2.png");
+    // SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);   // Red
+    
   }
-  SDL_RenderFillRect(sdl_renderer, &block);
+  // SDL_RenderFillRect(sdl_renderer, &block);
+  SDL_RenderCopy(sdl_renderer, head_image, nullptr, &block);
+
+  // Render level welcome screen when level_finish is true
+  if (level_finish) {
+    std::string filename = "../images/level" + std::to_string(level) + ".png";
+    SDL_Texture* level_image = IMG_LoadTexture(sdl_renderer, filename.c_str());
+    SDL_Rect block;
+    block.w = screen_width / grid_width * 18;      // This is how a grid's width and height are defined
+    block.h = screen_height / grid_height * 6;
+    block.x = screen_width / grid_width * 7;
+    block.y = screen_height / grid_height * 1;
+    SDL_RenderCopy(sdl_renderer, level_image, nullptr, &block);
+  }
+
 
   // Update Screen
   // Up until now everything was drawn behind the scenes.
