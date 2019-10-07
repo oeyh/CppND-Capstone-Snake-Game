@@ -113,8 +113,8 @@ void Game::LevelInit(Controller const &controller, bool &running, Renderer &rend
     if (!running) {  
       break;
     }
-    controller.HandlePause(running, level_finish); // click cross on window would set running to false and quit the game loop
-    // SDL_Delay(100);
+    controller.HandlePause(running, level_finish); // click enter will reset level_finish to false; click cross on window would set running to false and quit the game loop
+    SDL_Delay(10);
   
     // std::cout << "After HandlePause\n";
   }

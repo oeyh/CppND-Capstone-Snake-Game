@@ -6,8 +6,8 @@
 int main() {
   constexpr std::size_t kFramesPerSecond{60};   // constexpr makes sure it is a compile-time constant; frames per second
   constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};   // ms per frame = 1000 / frame per second
-  constexpr std::size_t kScreenWidth{640};    // screen width
-  constexpr std::size_t kScreenHeight{640};   // screen height
+  constexpr std::size_t kScreenWidth{800};    // screen width
+  constexpr std::size_t kScreenHeight{800};   // screen height
   constexpr std::size_t kGridWidth{32};       // number of grids in horizontal direction
   constexpr std::size_t kGridHeight{32};      // number of grids in vertical direction
   // constexpr std::size_t kScreenWidth{720};    // screen width

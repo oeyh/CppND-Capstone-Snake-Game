@@ -49,21 +49,25 @@ void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std
   SDL_RenderClear(sdl_renderer);
 
   // Render food
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);   // Yellow
+  // SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);   // Yellow
+  SDL_Texture* food_image = IMG_LoadTexture(sdl_renderer, "../images/pacman-yellow.png");
   for (int i = 0; i < food.size(); ++i) {
     if (food_status[i]) {   // only render food that's still there
       block.x = food[i].x * block.w;
       block.y = food[i].y * block.h;
-      SDL_RenderFillRect(sdl_renderer, &block);
+      // SDL_RenderFillRect(sdl_renderer, &block);
+      SDL_RenderCopy(sdl_renderer, food_image, nullptr, &block);
     }
   }
 
   // Render stone
-  SDL_SetRenderDrawColor(sdl_renderer, 0x80, 0xFF, 0x00, 0xFF);   // Green
+  // SDL_SetRenderDrawColor(sdl_renderer, 0x80, 0xFF, 0x00, 0xFF);   // Green
+  SDL_Texture* stone_image = IMG_LoadTexture(sdl_renderer, "../images/stone.png");
   for (SDL_Point const &point : stone) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
-    SDL_RenderFillRect(sdl_renderer, &block);
+    // SDL_RenderFillRect(sdl_renderer, &block);
+    SDL_RenderCopy(sdl_renderer, stone_image, nullptr, &block);
   }
 
   // Render snake's body
