@@ -42,7 +42,7 @@ class Game {
   int food_cnt; // TODO: will get this number from config file
   std::vector<bool> food_status;  // whether the food is eaten or not
   bool level_finish;  // flag that indicates a pause is needed
-  int total_levels = 3; // total number of levels; when reaches total_levels + 1, game ends
+  int total_levels = 5; // total number of levels; when reaches total_levels + 1, game ends
   int m_level;  // game level
   std::size_t m_grid_width;
   std::size_t m_grid_height;
