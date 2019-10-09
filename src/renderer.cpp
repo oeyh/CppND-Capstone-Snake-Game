@@ -39,7 +39,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std::vector<bool> const &food_status, std::vector<SDL_Point> const &stone, bool &level_finish, int level) {
+void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std::vector<bool> const &food_status, std::vector<SDL_Point> const &stone, Snake::LevelStatus level_status, int level) {
   SDL_Rect block;
   block.w = screen_width / grid_width;      // This is how a grid's width and height are defined
   block.h = screen_height / grid_height;
@@ -91,13 +91,20 @@ void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std
   } else {
     head_image = IMG_LoadTexture(sdl_renderer, "../images/blast3.png");
     // SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);   // Red
-    
+    // Also show game over screen
+    SDL_Texture* level_image = IMG_LoadTexture(sdl_renderer, "../images/gameover.png");
+    SDL_Rect block;
+    block.w = screen_width / grid_width * 18;      // This is how a grid's width and height are defined
+    block.h = screen_height / grid_height * 6;
+    block.x = screen_width / grid_width * 7;
+    block.y = screen_height / grid_height * 1;
+    SDL_RenderCopy(sdl_renderer, level_image, nullptr, &block);
   }
   // SDL_RenderFillRect(sdl_renderer, &block);
   SDL_RenderCopy(sdl_renderer, head_image, nullptr, &block);
 
-  // Render level welcome screen when level_finish is true
-  if (level_finish) {
+  // Render level screen based on level_status
+  if (level_status == Snake::LevelStatus::LEVEL_END) {
     std::string filename = "../images/level" + std::to_string(level) + ".png";
     SDL_Texture* level_image = IMG_LoadTexture(sdl_renderer, filename.c_str());
     SDL_Rect block;
@@ -106,7 +113,15 @@ void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std
     block.x = screen_width / grid_width * 7;
     block.y = screen_height / grid_height * 1;
     SDL_RenderCopy(sdl_renderer, level_image, nullptr, &block);
-  }
+  } else if (level_status == Snake::LevelStatus::GAME_END) {
+    SDL_Texture* level_image = IMG_LoadTexture(sdl_renderer, "../images/success.png");
+    SDL_Rect block;
+    block.w = screen_width / grid_width * 18;      // This is how a grid's width and height are defined
+    block.h = screen_height / grid_height * 6;
+    block.x = screen_width / grid_width * 7;
+    block.y = screen_height / grid_height * 1;
+    SDL_RenderCopy(sdl_renderer, level_image, nullptr, &block);
+  } 
 
 
   // Update Screen

@@ -18,7 +18,7 @@ class Game {
   int GetSize() const;
   // void SetLevelRunning(bool);
   
-
+  
  private:
   // Level stores level information
   struct Level {
@@ -41,7 +41,7 @@ class Game {
   std::vector<SDL_Point> stone;
   int food_cnt; // TODO: will get this number from config file
   std::vector<bool> food_status;  // whether the food is eaten or not
-  bool level_finish;  // flag that indicates a pause is needed
+  Snake::LevelStatus level_status;  // flag that indicates level status
   int total_levels = 5; // total number of levels; when reaches total_levels + 1, game ends
   int m_level;  // game level
   std::size_t m_grid_width;
@@ -58,7 +58,7 @@ class Game {
   void PlaceFood(Level &lc);
   void PlaceStone(Level &lc);
   void Update();
-  void LevelInit(Controller const &controller, bool &running, Renderer &renderer, int level);
+  void LevelInit(Controller const &controller, bool &running, Renderer &renderer);
   void LevelWelcomeScreen(Renderer &renderer, int level);
   bool level_running; // 
   

@@ -13,7 +13,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
   // PlaceFood();
   // PlaceStone();
   m_level = 1;
-  level_finish = true;
+  level_status = Snake::LevelStatus::LEVEL_END;
   m_grid_width = grid_width;
   m_grid_height = grid_height;
   // level_running = false;
@@ -32,10 +32,11 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
   while (running) {
     // pause game when needed
-    if (level_finish) {
+    if (level_status == Snake::LevelStatus::LEVEL_END || 
+        level_status == Snake::LevelStatus::GAME_END) {
 
       // std::cout << "Before Level Init\n";
-      LevelInit(controller, running, renderer, m_level);
+      LevelInit(controller, running, renderer);
       m_level++;
       // LevelInit(controller, running, renderer, m_level);  // for testing, level does not increment
       // std::cout << "After Level Init\n";
@@ -51,7 +52,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food, food_status, stone, level_finish, m_level);
+    renderer.Render(snake, food, food_status, stone, level_status, m_level);
 
     // for debug
     // std::cout << "After Update and Render\n";
@@ -59,7 +60,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // level completes when food_cnt becomes 0; food_cnt is updated in Game::Update()
     if (food_cnt == 0) {
-      level_finish = true;
+      level_status = Snake::LevelStatus::LEVEL_END;
     }
 
     frame_end = SDL_GetTicks();
@@ -82,20 +83,17 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     if (frame_duration < target_frame_duration) {
       SDL_Delay(target_frame_duration - frame_duration);
     }
-
-
   }
 }
 
 // init next level
-void Game::LevelInit(Controller const &controller, bool &running, Renderer &renderer, int level) {
-  if (level <= total_levels) {
+void Game::LevelInit(Controller const &controller, bool &running, Renderer &renderer) {
+  if (m_level <= total_levels) {
     // read level config file and init level
-    std::string level_file {"level_" + std::to_string(level) + ".dat"};
+    std::string level_file {"level_" + std::to_string(m_level) + ".dat"};
     std::cout << level_file << "\n";
     Level levelconfig(level_file);
 
-    // level_finish = false;
     // std::cout << "Before Place Food\n";
     PlaceFood(levelconfig);
     // std::cout << "Before Place Stone\n";
@@ -106,28 +104,26 @@ void Game::LevelInit(Controller const &controller, bool &running, Renderer &rend
     // Also init snake
     snake = Snake(m_grid_width, m_grid_height);
 
-    // // Render level welcome screen
-    // renderer.Render(snake, food, food_status, stone, level_finish, m_level);
+  } else {
+    level_status = Snake::LevelStatus::GAME_END; // This will make renderer render success screen
+    renderer.Render(snake, food, food_status, stone, level_status, m_level);
   }
 
-  while (level_finish) {
+  while (level_status == Snake::LevelStatus::LEVEL_END || 
+         level_status == Snake::LevelStatus::GAME_END) {
 
     // std::cout << "Before HandlePause\n";
     // if running flag becomes false, quit loop
     if (!running) {  
       break;
     }
-    controller.HandlePause(running, level_finish); // click enter will reset level_finish to false; click cross on window would set running to false and quit the game loop
+    controller.HandlePause(running, level_status); // click enter will reset level_status to RUNNING; click cross on window would set running to false and quit the game loop
     SDL_Delay(10);
   
     // std::cout << "After HandlePause\n";
   }
   // std::cout << "After HandlePause while loop\n";
 }
-
-// void Game::SetLevelRunning(bool run_flag) {
-//   level_finish = !run_flag;
-// }
 
 // init food location
 void Game::PlaceFood(Level &lc) {
@@ -143,8 +139,7 @@ void Game::PlaceStone(Level &lc) {
 
 // init level screen
 void Game::LevelWelcomeScreen(Renderer &renderer, int level) {
-  renderer.Render(snake, food, food_status, stone, level_finish, m_level);
-  return;
+  renderer.Render(snake, food, food_status, stone, level_status, m_level);
 }
 
 

@@ -17,8 +17,6 @@ class Snake {
         head_x(grid_width / 2),
         head_y(grid_height / 2) {}
 
-  
-
   void Update();    // update head and body
   
   void GrowBody();  // set growing flag to true
@@ -33,6 +31,13 @@ class Snake {
   float head_x;         // head x coordinate, float
   float head_y;         // head y coordinate, float
   std::vector<SDL_Point> body;    // a vector of all body points; the begin of the vector is tail, the end is head 
+
+  enum class LevelStatus {
+    LEVEL_END,
+    GAME_END,
+    SNAKE_DEAD,
+    RUNNING
+  };
 
  private:
   void UpdateHead();    // update head
