@@ -10,14 +10,11 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       engine(dev()),
       random_w(0, static_cast<int>(grid_width) - 1),  // inclusive on both sides, add -1 to avoid placing food just outside screen
       random_h(0, static_cast<int>(grid_height) - 1) {
-  // PlaceFood();
-  // PlaceStone();
+
   m_level = 1;
   level_status = Snake::LevelStatus::LEVEL_END;
   m_grid_width = grid_width;
   m_grid_height = grid_height;
-  // level_running = false;
-
 }
 
 // Game loop
@@ -86,7 +83,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
-// init next level
+// init level
 void Game::LevelInit(Controller const &controller, bool &running, Renderer &renderer) {
   if (m_level <= total_levels) {
     // read level config file and init level
@@ -142,7 +139,7 @@ void Game::LevelWelcomeScreen(Renderer &renderer, int level) {
   renderer.Render(snake, food, food_status, stone, level_status, m_level);
 }
 
-
+// Update snake and food status
 void Game::Update() {
   if (!snake.alive) return;
 
@@ -169,7 +166,7 @@ void Game::Update() {
     ++food_num;
   }
 
-  // // record the food point that has been consumed
+  // record the food point that has been consumed
   if (hit_food) {
     food_status[food_num] = false;
     food_cnt = std::count(food_status.begin(), food_status.end(), true);   // update food count, level completes when food count = 0

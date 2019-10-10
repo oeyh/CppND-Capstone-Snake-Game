@@ -34,15 +34,18 @@ Renderer::Renderer(const std::size_t screen_width,
   }
 }
 
+// Destructor
 Renderer::~Renderer() {
   SDL_DestroyWindow(sdl_window);
   SDL_Quit();
 }
 
+
+// Main render function
 void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std::vector<bool> const &food_status, std::vector<SDL_Point> const &stone, Snake::LevelStatus level_status, int level) {
   SDL_Rect block;
-  block.w = screen_width / grid_width;      // This is how a grid's width and height are defined
-  block.h = screen_height / grid_height;
+  block.w = screen_width / grid_width;      // grid_width refers to number of grids in x; so w is number of pixels in x
+  block.h = screen_height / grid_height;    // grid_height refers to number of grids in y; so h is number of pixels in y
 
   // Clear screen
   SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);   // black grey
@@ -102,6 +105,7 @@ void Renderer::Render(Snake const snake, std::vector<SDL_Point> const &food, std
   }
   // SDL_RenderFillRect(sdl_renderer, &block);
   SDL_RenderCopy(sdl_renderer, head_image, nullptr, &block);
+
 
   // Render level screen based on level_status
   if (level_status == Snake::LevelStatus::LEVEL_END) {

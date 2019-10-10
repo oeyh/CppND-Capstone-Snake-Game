@@ -21,7 +21,7 @@ class Game {
   
   
  private:
-  // Level stores level information
+  // Level class stores level information
   struct Level {
     int level_id;
     int food_cnt;
@@ -55,13 +55,11 @@ class Game {
 
   int score{0};
   
-
   void PlaceFood(Level &lc);
   void PlaceStone(Level &lc);
   void Update();
   void LevelInit(Controller const &controller, bool &running, Renderer &renderer);
   void LevelWelcomeScreen(Renderer &renderer, int level);
-  bool level_running; // 
   
 };
 

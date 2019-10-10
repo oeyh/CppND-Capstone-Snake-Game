@@ -4,7 +4,7 @@
 #include "snake.h"
 
 // change direction based on input direction
-// opposite direction is also fed manually (may be not the best way to do it)
+// opposite direction is also fed manually 
 void Controller::ChangeDirection(Snake &snake, Snake::Direction input,
                                  Snake::Direction opposite) const {
   if (snake.direction != opposite || snake.size == 1) snake.direction = input;

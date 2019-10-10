@@ -10,10 +10,6 @@ int main() {
   constexpr std::size_t kScreenHeight{800};   // screen height
   constexpr std::size_t kGridWidth{32};       // number of grids in horizontal direction
   constexpr std::size_t kGridHeight{32};      // number of grids in vertical direction
-  // constexpr std::size_t kScreenWidth{720};    // screen width
-  // constexpr std::size_t kScreenHeight{720};   // screen height
-  // constexpr std::size_t kGridWidth{8};       // number of grids in horizontal direction
-  // constexpr std::size_t kGridHeight{8};      // number of grids in vertical direction
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);  // create Renderer object
   Controller controller;    // create controller object, used to interface with game control input

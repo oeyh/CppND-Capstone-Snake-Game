@@ -6,7 +6,15 @@
 
 class Snake {
  public:
-  enum class Direction { kUp, kDown, kLeft, kRight };   // scoped enumeration called Direction
+  enum class Direction { kUp, kDown, kLeft, kRight };   // scoped enumeration called Direction, used to indicated moving directions
+  
+  // level status used to indicate different status of the game
+  enum class LevelStatus {
+    LEVEL_END,
+    GAME_END,
+    SNAKE_DEAD,
+    RUNNING
+  };
 
   // constructor
   // grid_width and grid_height are defined same as in main(), this is for snake to know when to wrap around when hitting boundaries
@@ -25,27 +33,22 @@ class Snake {
   Direction direction = Direction::kUp;   // public direction attribute
 
   // float speed{0.1f};    // speed of the snake, starting at 0.1, what does 0.1 mean? 0.1 grid per loop? 
-  float speed{0.05f};     // my slow mode
+  float speed{0.05f};     // slow mode
   int size{1};          // size, starting at 1
   bool alive{true};     // alive or not
   float head_x;         // head x coordinate, float
   float head_y;         // head y coordinate, float
   std::vector<SDL_Point> body;    // a vector of all body points; the begin of the vector is tail, the end is head 
 
-  enum class LevelStatus {
-    LEVEL_END,
-    GAME_END,
-    SNAKE_DEAD,
-    RUNNING
-  };
+  
 
  private:
   void UpdateHead();    // update head
   void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);   // update body
 
   bool growing{false};  // use growing as a flag to mark if the snake is touching the food
-  int grid_width;     // ???
-  int grid_height;    // ???
+  int grid_width;     // number of grids in x
+  int grid_height;    // number of grids in y
 };
 
 #endif
