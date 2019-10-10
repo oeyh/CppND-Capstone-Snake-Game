@@ -44,7 +44,7 @@ There're a total of 5 levels. At the beginning of each level, press enter to sta
 
 ## Project Rubric
 
-The project met the following project rubric (Total 10 items + required)
+The project met the following project rubric (total 10 items + required)
 1. All required README criteria
 2. Compiling and Testing criteria (See above for Dependencies and Build instructions)
 3. All Loops, Functions, I/O criteria (3 items)
