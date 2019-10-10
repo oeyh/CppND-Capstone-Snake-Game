@@ -16,7 +16,9 @@ Needs the following:
 
 In Udacity Project Workspace, include the following lines in .student_bashrc will met the above dependencies:
 `apt-get update`
+
 `sudo apt-get -y install libsdl2-dev`
+
 `sudo apt-get -y install libsdl2-image-dev`
 
 ## Basic Build Instructions
@@ -24,7 +26,7 @@ In Udacity Project Workspace, include the following lines in .student_bashrc wil
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./SnakeGame`.
+4. Run it: `./SnakeGame`
 
 ## Game Instructions
 
@@ -34,10 +36,10 @@ There're a total of 5 levels. At the beginning of each level, press enter to sta
 
 ## Code structures
 
-* main.cpp: main codes to decide game window properties and create game objects
-* snake.h, snake.cpp: define property and rule for snake
-* game.h, game.cpp: define and control the game loop; define level properties from level configuration files in levels/
-* renderer.h, renderer.cpp: display game window and instruction information
+* **main.cpp**: main codes to decide game window properties and create game objects
+* **snake.h, snake.cpp**: define property and rule for snake
+* **game.h, game.cpp**: define and control the game loop; define level properties from level configuration files in levels/
+* **renderer.h, renderer.cpp**: display game window and instruction information
 
 ## Project Rubric
 
