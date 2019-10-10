@@ -15,6 +15,7 @@ Needs the following:
 * gcc/g++ >= 5.4
 
 In Udacity Project Workspace, include the following lines in .student_bashrc will met the above dependencies:
+
 `apt-get update`
 
 `sudo apt-get -y install libsdl2-dev`
