@@ -1,27 +1,23 @@
-# CPPND: Capstone Snake Game Example
+# CPPND Capstone Project -- A New Snake Game
 
-This is a starter repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
+Starting from the starter code for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213), created levels in the game and gave it a new look. 
 
-<img src="snake_game.gif"/>
+<img src="screenshot1.png"/>
 
-The Capstone Project gives you a chance to integrate what you've learned throughout this program. This project will become an important part of your portfolio to share with current and future colleagues and employers.
 
-In this project, you can build your own C++ application or extend this Snake game, following the principles you have learned throughout this Nanodegree Program. This project will demonstrate that you can independently create applications using a wide range of C++ features.
+## Dependencies
 
-## Dependencies for Running Locally
+Needs the following:
 * cmake >= 3.7
-  * All OSes: [click here for installation instructions](https://cmake.org/install/)
 * make >= 4.1 (Linux, Mac), 3.81 (Windows)
-  * Linux: make is installed by default on most Linux distros
-  * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
-  * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
 * SDL2 >= 2.0
-  * All installation instructions can be found [here](https://wiki.libsdl.org/Installation)
-  * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source.
+* SDL2_image >= 2.0
 * gcc/g++ >= 5.4
-  * Linux: gcc / g++ is installed by default on most Linux distros
-  * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
-  * Windows: recommend using [MinGW](http://www.mingw.org/)
+
+In Udacity Project Workspace, include the following lines in .student_bashrc will met the above dependencies:
+`apt-get update`
+`sudo apt-get -y install libsdl2-dev`
+`sudo apt-get -y install libsdl2-image-dev`
 
 ## Basic Build Instructions
 
@@ -29,3 +25,25 @@ In this project, you can build your own C++ application or extend this Snake gam
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./SnakeGame`.
+
+## Game Instructions
+
+There're a total of 5 levels. At the beginning of each level, press enter to start the game. Use arrow keys to control movement of the tank(s) and hit all the yellow ghosts to complete the level. Complete all 5 levels without hitting the wall or your own tank to win the game. 
+
+<img src="screenshot2.png"/>
+
+## Code structures
+
+* main.cpp: main codes to decide game window properties and create game objects
+* snake.h, snake.cpp: define property and rule for snake
+* game.h, game.cpp: define and control the game loop; define level properties from level configuration files in levels/
+* renderer.h, renderer.cpp: display game window and instruction information
+
+## Project Rubric
+
+The project met the following project rubric (Total 10 items + required)
+1. All required README criteria
+2. Compiling and Testing criteria (See above for Dependencies and Build instructions)
+3. All Loops, Functions, I/O criteria (3 items)
+4. OOP criteria (5 items): The project uses Object Oriented Programming techniques; Classes use appropriate access specifiers for class members; Class constructors utilize member initialization lists; Classes abstract implementation details from their interfaces; Classes encapsulate behavior; 
+5. Memory Management criteria (2 items): The project makes use of references in function declarations; The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate; 
